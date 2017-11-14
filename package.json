@@ -27,7 +27,7 @@
   },
   "homepage": "https://github.com/materialr/icon-toggle#readme",
   "dependencies": {
-    "@material/icon-toggle": "^0.24.0",
+    "@material/icon-toggle": "^0.25.0",
     "@materialr/ripple": "^0.0.1",
     "classnames": "^2.2.5",
     "prop-types": "^15.6.0",
@@ -57,6 +57,9 @@
       "/node_modules/",
       "<rootDir>/.jest"
     ],
+    "moduleNameMapper": {
+      "\\.scss$": "<rootDir>/.jest/style-mock.js"
+    },
     "roots": [
       "<rootDir>/src"
     ],
@@ -68,8 +71,8 @@
       "/node_modules/",
       "<rootDir>/.jest"
     ],
-    "moduleNameMapper": {
-      "\\.scss$": "<rootDir>/.jest/style-mock.js"
-    }
+    "transformIgnorePatterns": [
+      "<rootDir>/node_modules/(!@material)"
+    ]
   }
 }

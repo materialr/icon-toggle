@@ -5,7 +5,7 @@ import React from 'react';
 
 import '@material/icon-toggle/mdc-icon-toggle.scss';
 
-import iconToggleFoundation from './icon-toggle-foundation';
+import iconToggleFoundation from './foundation';
 
 class IconToggle extends React.Component {
   constructor(props) {
