@@ -68,13 +68,10 @@ class IconToggle extends React.Component {
       .trim().replace('  ', ' ');
   }
   getClassNamesFromProps() {
-    const { accent, disabled, primary } = this.props;
     return classnames({
       'material-icons': true,
       'mdc-icon-toggle': true,
-      'mdc-icon-toggle--accent': accent,
-      'mdc-icon-toggle--disabled': disabled,
-      'mdc-icon-toggle--primary': primary,
+      'mdc-icon-toggle--disabled': this.props.disabled,
     });
   }
   getJSONOff() {
@@ -164,7 +161,6 @@ class IconToggle extends React.Component {
 }
 
 IconToggle.propTypes = {
-  accent: PropTypes.bool,
   className: PropTypes.string,
   disabled: PropTypes.bool,
   iconOff: PropTypes.string.isRequired,
@@ -172,16 +168,13 @@ IconToggle.propTypes = {
   labelOff: PropTypes.string.isRequired,
   labelOn: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
-  primary: PropTypes.bool,
   rippleEnabled: PropTypes.bool,
   tabIndex: PropTypes.number,
 };
 
 IconToggle.defaultProps = {
-  accent: false,
   className: '',
   disabled: false,
-  primary: false,
   rippleEnabled: false,
   tabIndex: 0,
 };
