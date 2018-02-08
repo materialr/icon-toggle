@@ -28,12 +28,12 @@ test('Adds the default classNames with no props', () => {
 });
 
 test('Adds all necessary classNames with props', () => {
+  const CLASS_NAME = 'CLASS_NAME';
   const wrapper = shallow(
-    <IconToggle {...defaultProps} accent disabled primary />,
+    <IconToggle {...defaultProps} className={CLASS_NAME} disabled />,
     { disableLifecycleMethods: true },
   );
-  const expected = 'material-icons mdc-icon-toggle mdc-icon-toggle--accent ' +
-    'mdc-icon-toggle--disabled mdc-icon-toggle--primary';
+  const expected = `material-icons mdc-icon-toggle mdc-icon-toggle--disabled ${CLASS_NAME}`;
 
   const actual = wrapper.props().className;
 
