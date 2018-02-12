@@ -1,16 +1,6 @@
 import { MDCIconToggleFoundation } from '@material/icon-toggle';
 
-import {
-  addClass,
-  deregisterInteractionHandler,
-  getAttribute,
-  notifyChange,
-  registerInteractionHandler,
-  removeAttribute,
-  removeClass,
-  setAttribute,
-  setText,
-} from './adapter-utilities';
+import adapterUtilities from './adapter-utilities';
 
 export default ({
   data,
@@ -21,8 +11,20 @@ export default ({
   updateClassNames,
   updateTabIndex,
   updateText,
-}) =>
-  new MDCIconToggleFoundation({
+}) => {
+  const {
+    addClass,
+    deregisterInteractionHandler,
+    getAttribute,
+    notifyChange,
+    registerInteractionHandler,
+    removeAttribute,
+    removeClass,
+    setAttribute,
+    setText,
+  } = adapterUtilities();
+
+  return new MDCIconToggleFoundation({
     addClass: addClass(updateClassNames),
     deregisterInteractionHandler: deregisterInteractionHandler(element),
     getAttr: getAttribute(data),
@@ -35,3 +37,4 @@ export default ({
     setTabIndex: updateTabIndex,
     setText: setText(updateText),
   });
+};
