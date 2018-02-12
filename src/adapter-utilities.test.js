@@ -1,14 +1,6 @@
-import {
-  addClass,
-  deregisterInteractionHandler,
-  getAttribute,
-  notifyChange,
-  registerInteractionHandler,
-  removeAttribute,
-  removeClass,
-  setAttribute,
-  setText,
-} from './adapter-utilities';
+import adapterUtilities from './adapter-utilities';
+
+const adapterUtilitiesInstance = adapterUtilities();
 
 const ATTRIBUTE_ONE_KEY = 'ATTRIBUTE_ONE_KEY';
 const ATTRIBUTE_ONE_VALUE = 'ATTRIBUTE_ONE_VALUE';
@@ -22,8 +14,8 @@ test('\'addClass()\' adds a className and sends the list to \'updateClassNames()
   const expectedSecond = [CLASS_NAME_1, CLASS_NAME_2];
   const updateClassNames = jest.fn();
 
-  addClass(updateClassNames)(CLASS_NAME_1);
-  addClass(updateClassNames)(CLASS_NAME_2);
+  adapterUtilitiesInstance.addClass(updateClassNames)(CLASS_NAME_1);
+  adapterUtilitiesInstance.addClass(updateClassNames)(CLASS_NAME_2);
 
   expect(updateClassNames.mock.calls[0][0]).toEqual(expectedFirst);
   expect(updateClassNames.mock.calls[1][0]).toEqual(expectedSecond);
@@ -35,7 +27,7 @@ test('\'deregisterInteractionHandler()\' removes an event listener from the elem
   const TYPE = 'TYPE';
   const element = { removeEventListener: REMOVE_EVENT_LISTENER };
 
-  deregisterInteractionHandler(element)(TYPE, HANDLER);
+  adapterUtilitiesInstance.deregisterInteractionHandler(element)(TYPE, HANDLER);
 
   expect(REMOVE_EVENT_LISTENER).toBeCalledWith(TYPE, HANDLER);
 });
@@ -46,7 +38,7 @@ test('\'getAttribute()\' gets a given attribute if it exists', () => {
   const DATA = { [KEY]: VALUE };
   const expected = VALUE;
 
-  const actual = getAttribute(DATA)(KEY);
+  const actual = adapterUtilitiesInstance.getAttribute(DATA)(KEY);
 
   expect(actual).toBe(expected);
 });
@@ -57,7 +49,7 @@ test('\'getAttribute()\' returns \'undefined\' when key does not exist', () => {
   const DATA = { [KEY]: VALUE };
   const expected = undefined;
 
-  const actual = getAttribute(DATA)('NOKEY');
+  const actual = adapterUtilitiesInstance.getAttribute(DATA)('NOKEY');
 
   expect(actual).toBe(expected);
 });
@@ -68,7 +60,7 @@ test('\'notifyChange()\' calls the change handler', () => {
   const DATA = { isOn: IS_ON };
   const expected = IS_ON;
 
-  notifyChange(ON_CHANGE)(DATA);
+  adapterUtilitiesInstance.notifyChange(ON_CHANGE)(DATA);
 
   expect(ON_CHANGE).toHaveBeenCalledWith(expected);
 });
@@ -79,7 +71,7 @@ test('\'registerInteractionHandler()\' adds a non-passive interaction handler', 
   const TYPE = 'TYPE';
   const element = { addEventListener: ADD_EVENT_LISTENER };
 
-  registerInteractionHandler(element)(TYPE, HANDLER);
+  adapterUtilitiesInstance.registerInteractionHandler(element)(TYPE, HANDLER);
 
   expect(ADD_EVENT_LISTENER).toBeCalledWith(TYPE, HANDLER, null);
 });
@@ -90,7 +82,7 @@ test('\'registerInteractionHandler()\' adds a passive interaction handler', () =
   const TYPE = 'touchstart';
   const element = { addEventListener: ADD_EVENT_LISTENER };
 
-  registerInteractionHandler(element)(TYPE, HANDLER);
+  adapterUtilitiesInstance.registerInteractionHandler(element)(TYPE, HANDLER);
 
   expect(ADD_EVENT_LISTENER).toBeCalledWith(TYPE, HANDLER, { passive: true });
 });
@@ -103,8 +95,8 @@ test('\'setAttribute()\' adds an attribute to the list', () => {
     [ATTRIBUTE_TWO_KEY]: ATTRIBUTE_TWO_VALUE,
   };
 
-  setAttribute(UPDATE_ATTRIBUTES)(ATTRIBUTE_ONE_KEY, ATTRIBUTE_ONE_VALUE);
-  setAttribute(UPDATE_ATTRIBUTES)(ATTRIBUTE_TWO_KEY, ATTRIBUTE_TWO_VALUE);
+  adapterUtilitiesInstance.setAttribute(UPDATE_ATTRIBUTES)(ATTRIBUTE_ONE_KEY, ATTRIBUTE_ONE_VALUE);
+  adapterUtilitiesInstance.setAttribute(UPDATE_ATTRIBUTES)(ATTRIBUTE_TWO_KEY, ATTRIBUTE_TWO_VALUE);
 
   expect(UPDATE_ATTRIBUTES.mock.calls[0][0]).toEqual(expectedFirst);
   expect(UPDATE_ATTRIBUTES.mock.calls[1][0]).toEqual(expectedSecond);
@@ -114,7 +106,7 @@ test('\'removeAttribute()\' remove an attribute from the list', () => {
   const UPDATE_ATTRIBUTES = jest.fn();
   const expected = { [ATTRIBUTE_ONE_KEY]: ATTRIBUTE_ONE_VALUE };
 
-  removeAttribute(UPDATE_ATTRIBUTES)(ATTRIBUTE_TWO_KEY);
+  adapterUtilitiesInstance.removeAttribute(UPDATE_ATTRIBUTES)(ATTRIBUTE_TWO_KEY);
 
   expect(UPDATE_ATTRIBUTES).toHaveBeenCalledWith(expected);
 });
@@ -124,8 +116,8 @@ test('\'removeClass()\' removes a classNames ands sends the list of classNames t
   const expectedSecond = [];
   const updateClassNames = jest.fn();
 
-  removeClass(updateClassNames)(CLASS_NAME_2);
-  removeClass(updateClassNames)(CLASS_NAME_1);
+  adapterUtilitiesInstance.removeClass(updateClassNames)(CLASS_NAME_2);
+  adapterUtilitiesInstance.removeClass(updateClassNames)(CLASS_NAME_1);
 
   expect(updateClassNames.mock.calls[0][0]).toEqual(expectedFirst);
   expect(updateClassNames.mock.calls[1][0]).toEqual(expectedSecond);
@@ -136,7 +128,7 @@ test('\'setText()\' calls the update text handler', () => {
   const UPDATE_TEXT = jest.fn();
   const expected = TEXT;
 
-  setText(UPDATE_TEXT)(TEXT);
+  adapterUtilitiesInstance.setText(UPDATE_TEXT)(TEXT);
 
   expect(UPDATE_TEXT).toHaveBeenCalledWith(expected);
 });
