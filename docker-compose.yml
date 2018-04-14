@@ -4,4 +4,4 @@ services:
     build: "."
     container_name: "materialr-icon-toggle"
     volumes:
-      - ./:/app
+      - ./:/home/node/app
