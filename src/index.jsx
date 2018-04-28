@@ -1,77 +1,34 @@
-import rippleFoundation from '@materialr/ripple';
+import { MDCIconToggle } from '@material/icon-toggle';
+import { strings } from '@material/icon-toggle/constants';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import '@material/icon-toggle/mdc-icon-toggle.scss';
-
-import iconToggleFoundation from './foundation';
-
 class IconToggle extends React.Component {
   constructor(props) {
     super(props);
-    this.componentIsMounted = undefined;
+    this.elementRoot = undefined;
     this.iconToggle = undefined;
-    this.iconToggleFoundation = undefined;
-    this.rippleFoundation = undefined;
-    this.state = {
-      attributes: {},
-      classNames: [],
-      cssVariables: {},
-      tabIndex: props.tabIndex,
-      text: props.iconOff,
-    };
     this.getClassNames = this.getClassNames.bind(this);
-    this.getClassNamesAsString = this.getClassNamesAsString.bind(this);
-    this.getClassNamesFromProps = this.getClassNamesFromProps.bind(this);
     this.getJSONOff = this.getJSONOff.bind(this);
     this.getJSONOn = this.getJSONOn.bind(this);
-    this.getTabIndex = this.getTabIndex.bind(this);
-    this.iconToggleCreate = this.iconToggleCreate.bind(this);
-    this.iconToggleDestroy = this.iconToggleDestroy.bind(this);
-    this.rippleCreate = this.rippleCreate.bind(this);
-    this.rippleDestroy = this.rippleDestroy.bind(this);
-    this.updateAttributes = this.updateAttributes.bind(this);
-    this.updateClassNames = this.updateClassNames.bind(this);
-    this.updateCssVariables = this.updateCssVariables.bind(this);
-    this.updateTabIndex = this.updateTabIndex.bind(this);
-    this.updateText = this.updateText.bind(this);
   }
   componentDidMount() {
-    this.componentIsMounted = true;
-    if (this.props.rippleEnabled) {
-      this.rippleCreate();
-    }
-    this.iconToggleCreate();
-  }
-  componentDidUpdate({ rippleEnabled: wasRippleEnabled }) {
-    const { rippleEnabled } = this.props;
-    if (wasRippleEnabled && !rippleEnabled) {
-      this.rippleDestroy();
-    }
-    if (!wasRippleEnabled && rippleEnabled) {
-      this.rippleCreate();
-    }
+    const { elementRoot, props: { onChange } } = this;
+    this.iconToggle = new MDCIconToggle(elementRoot);
+    this.iconToggle.listen(strings.CHANGE_EVENT, onChange);
   }
   componentWillUnmount() {
-    this.componentIsMounted = false;
-    if (this.props.rippleEnabled && this.rippleFoundation) {
-      this.rippleDestroy();
-    }
-    this.iconToggleDestroy();
+    this.iconToggle.unlisten(strings.CHANGE_EVENT, this.props.onChange);
+    this.iconToggle.destroy();
   }
   getClassNames() {
-    return this.state.classNames.join(' ');
-  }
-  getClassNamesAsString() {
-    return `${this.getClassNamesFromProps()} ${this.getClassNames()} ${this.props.className}`
-      .trim().replace('  ', ' ');
-  }
-  getClassNamesFromProps() {
+    const { className, disabled } = this.props;
     return classnames({
       'material-icons': true,
       'mdc-icon-toggle': true,
-      'mdc-icon-toggle--disabled': this.props.disabled,
+      'mdc-icon-toggle--disabled': disabled,
+      [className]: !!className,
     });
   }
   getJSONOff() {
@@ -82,80 +39,18 @@ class IconToggle extends React.Component {
     const { iconOn, labelOn } = this.props;
     return JSON.stringify({ content: iconOn, label: labelOn });
   }
-  getTabIndex() {
-    return this.state.tabIndex;
-  }
-  iconToggleCreate() {
-    this.iconToggleFoundation = iconToggleFoundation({
-      data: { 'data-toggle-off': this.getJSONOff(), 'data-toggle-on': this.getJSONOn() },
-      element: this.iconToggle,
-      getTabIndex: this.getTabIndex,
-      onChange: this.props.onChange,
-      updateAttributes: this.updateAttributes,
-      updateClassNames: this.updateClassNames,
-      updateText: this.updateText,
-    });
-    this.iconToggleFoundation.init();
-  }
-  iconToggleDestroy() {
-    this.iconToggleFoundation.destroy();
-    this.iconToggleFoundation = undefined;
-  }
-  rippleCreate() {
-    const { disabled } = this.props;
-    this.rippleFoundation = rippleFoundation({
-      centered: true,
-      disabled,
-      element: this.iconToggle,
-      self: this,
-      updateClassNames: this.updateClassNames,
-      updateCssVariables: this.updateCssVariables,
-      updateTabIndex: this.updateTabIndex,
-      updateText: this.updateText,
-    });
-    this.rippleFoundation.init();
-  }
-  rippleDestroy() {
-    this.rippleFoundation.destroy();
-    this.rippleFoundation = undefined;
-  }
-  updateAttributes(attributes) {
-    this.setState({ attributes });
-  }
-  updateClassNames(classNames) {
-    if (this.componentIsMounted) {
-      this.setState({ classNames });
-    }
-  }
-  updateCssVariables(cssVariables) {
-    if (this.componentIsMounted) {
-      this.setState({ cssVariables });
-    }
-  }
-  updateTabIndex(tabIndex) {
-    this.setState({ tabIndex });
-  }
-  updateText(text) {
-    this.setState({ text });
-  }
   render() {
-    const { labelOff } = this.props;
-    const { attributes, cssVariables, tabIndex, text } = this.state;
+    const { getClassNames, getJSONOff, getJSONOn, props: { labelOff } } = this;
     return (
       <i
         aria-label={labelOff}
         aria-pressed="false"
-        className={this.getClassNamesAsString()}
-        data-toggle-off={this.getJSONOff()}
-        data-toggle-on={this.getJSONOn()}
+        className={getClassNames()}
+        data-toggle-off={getJSONOff()}
+        data-toggle-on={getJSONOn()}
         ref={(iconToggle) => { this.iconToggle = iconToggle; }}
         role="button"
-        style={cssVariables}
-        tabIndex={tabIndex}
-        {...attributes}
-      >
-        {text}
-      </i>
+      />
     );
   }
 }
@@ -168,15 +63,11 @@ IconToggle.propTypes = {
   labelOff: PropTypes.string.isRequired,
   labelOn: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
-  rippleEnabled: PropTypes.bool,
-  tabIndex: PropTypes.number,
 };
 
 IconToggle.defaultProps = {
-  className: '',
+  className: undefined,
   disabled: false,
-  rippleEnabled: false,
-  tabIndex: 0,
 };
 
 export default IconToggle;
