@@ -61,11 +61,15 @@ test('Renders a disabled icon-toggle', () => {
     />,
     { disableLifecycleMethods: true },
   );
-  const expected = 'material-icons mdc-icon-toggle mdc-icon-toggle--disabled';
+  const expectedClassName = 'material-icons mdc-icon-toggle mdc-icon-toggle--disabled';
+  const expectedDisabled = true;
 
-  const actual = wrapper.props().className;
+  const wrapperProps = wrapper.props();
+  const actualClassName = wrapperProps.className;
+  const actualDisabled = wrapperProps['aria-disabled'];
 
-  expect(actual).toBe(expected);
+  expect(actualClassName).toBe(expectedClassName);
+  expect(actualDisabled).toBe(expectedDisabled);
 });
 
 test('Renders the necessary data attributes', () => {
