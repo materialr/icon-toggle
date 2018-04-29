@@ -4,6 +4,8 @@ import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import React from 'react';
 
+import '@material/icon-toggle/mdc-icon-toggle.scss';
+
 class IconToggle extends React.Component {
   constructor(props) {
     super(props);
@@ -40,15 +42,16 @@ class IconToggle extends React.Component {
     return JSON.stringify({ content: iconOn, label: labelOn });
   }
   render() {
-    const { getClassNames, getJSONOff, getJSONOn, props: { labelOff } } = this;
+    const { getClassNames, getJSONOff, getJSONOn, props: { disabled, labelOff } } = this;
     return (
       <i
+        aria-disabled={disabled}
         aria-label={labelOff}
         aria-pressed="false"
         className={getClassNames()}
         data-toggle-off={getJSONOff()}
         data-toggle-on={getJSONOn()}
-        ref={(iconToggle) => { this.iconToggle = iconToggle; }}
+        ref={(elementRoot) => { this.elementRoot = elementRoot; }}
         role="button"
       />
     );
