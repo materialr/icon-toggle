@@ -42,7 +42,21 @@ class IconToggle extends React.Component {
     return JSON.stringify({ content: iconOn, label: labelOn });
   }
   render() {
-    const { getClassNames, getJSONOff, getJSONOn, props: { disabled, labelOff } } = this;
+    const {
+      getClassNames,
+      getJSONOff,
+      getJSONOn,
+      props: {
+        className,
+        disabled,
+        iconOff,
+        iconOn,
+        labelOff,
+        labelOn,
+        onChange,
+        ...props
+      },
+    } = this;
     return (
       <i
         aria-disabled={disabled}
@@ -53,6 +67,7 @@ class IconToggle extends React.Component {
         data-toggle-on={getJSONOn()}
         ref={(elementRoot) => { this.elementRoot = elementRoot; }}
         role="button"
+        {...props}
       />
     );
   }
