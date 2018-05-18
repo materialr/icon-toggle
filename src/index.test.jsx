@@ -169,3 +169,23 @@ test('Destroys the MDCIconToggle component on unmount', () => {
   expect(actualUnlistenOne).toBe(expectedUnlistenOne);
   expect(actualUnlistenTwo).toBe(expectedUnlistenTwo);
 });
+
+test('Adds extra properties that are passed in', () => {
+  const DATA_QA = 'DATA_QA';
+  const wrapper = shallow(
+    <IconToggle
+      data-qa={DATA_QA}
+      iconOff={ICON_OFF}
+      iconOn={ICON_ON}
+      labelOff={LABEL_OFF}
+      labelOn={LABEL_ON}
+      onChange={ON_CHANGE}
+    />,
+    { disableLifecycleMethods: true },
+  );
+  const expected = DATA_QA;
+
+  const actual = wrapper.props()['data-qa'];
+
+  expect(actual).toBe(expected);
+});
